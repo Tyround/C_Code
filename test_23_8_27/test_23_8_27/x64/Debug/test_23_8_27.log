@@ -1,0 +1,2 @@
+﻿  test.c
+D:\code_c\code_test\test_23_8_27\test_23_8_27\test.c(9,2): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
