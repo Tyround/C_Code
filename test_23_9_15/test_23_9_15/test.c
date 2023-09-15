@@ -98,7 +98,131 @@ illegal:
 	{
 		for (row = 2; row <= 6; row++)
 		{
-			for(col = 30; col <= 26; col += 2)
+			for(col = 30; col <= 36; col += 2)
+			{
+				calendar[row][col] = '#';
+				if((row == 3 && col < 36) || (row == 5 && col > 30))
+				{
+					calendar[row][col] = ' ';
+				}
+			}
+		}
+	}
+
+	else if(M == 3)
+	{
+		for (row = 2; row <= 6; row++)
+		{
+			for (col = 30; col <= 36; col += 2)
+			{
+				calendar[row][col] = '#';
+				if ((row == 3 && col < 36) || (row == 5 && col < 36))
+				{
+					calendar[row][col] = ' ';
+				}
+			}
+		}
+	}
+
+	else if (M == 4)
+	{
+		{
+			for (row = 2; row <= 6; row++)
+			{
+				for (col = 30; col <= 36; col += 2)
+				{
+					calendar[row][col] = '#';
+					if ((row == 2 && col < 36 && col > 30) || (row == 3 && col < 36 && col > 30) || (row == 5 && col < 36) || (row == 6 && col < 36))
+					{
+						calendar[row][col] = ' ';
+					}
+				}
+			}
+		}
+	}
+
+	else if (M == 5)
+	{
+		for (row = 2; row <= 6; row++)
+		{
+			for (col = 30; col <= 36; col += 2)
+			{
+				calendar[row][col] = '#';
+				if ((row == 5 && col < 36) || (row == 3 && col > 30))
+				{
+					calendar[row][col] = ' ';
+				}
+			}
+		}
+	}
+
+	else if (M == 6)
+	{
+		for (row = 2; row <= 6; row++)
+		{
+			for (col = 30; col <= 36; col += 2)
+			{
+				calendar[row][col] = '#';
+				if ((row == 5 && col < 36) || (row == 3 && col > 30))
+				{
+					calendar[row][col] = ' ';
+				}
+			}
+		}
+		calendar[5][30] = '#';
+	}
+
+	else if (M == 7)
+	{
+		for (row = 2; row <= 6; row++)
+		{
+			for (col = 30; col <= 36; col += 2)
+			{
+				calendar[row][col] = '#';
+				if (row > 2 && col < 36)
+				{
+					calendar[row][col] = ' ';
+				}
+			}
+		}
+	}
+
+	else if (M == 8)
+	{
+		for (row = 2; row <= 6; row++)
+		{
+			for (col = 30; col <= 36; col += 2)
+			{
+				calendar[row][col] = '#';
+				if ((row == 3 && col < 36 && col > 30) || (row == 5 && col< 36 && col > 30))
+				{
+					calendar[row][col] = ' ';
+				}
+			}
+		}
+	}
+
+	else if (M == 9)
+	{
+		for (row = 2; row <= 6; row++)
+		{
+			for (col = 30; col <= 36; col += 2)
+			{
+				calendar[row][col] = '#';
+				if ((row == 3 && col < 36 && col > 30) || (row == 5 && col < 36 && col > 30))
+				{
+					calendar[row][col] = ' ';
+				}
+			}
+		}
+		calendar[5][30] = ' ';
+	}
+
+	else // 这里只剩下M = 10的情景
+	{
+		for (row = 2; row <= 6; row++)
+		{
+			for (col = 30; col <= 36; col += 2)
 			{
 				calendar[row][col] = '#';
 				if (row > 2 && row < 6 && col > 30 && col < 36)
@@ -108,14 +232,6 @@ illegal:
 			}
 		}
 	}
-	//马上明天了，先commit一下
-
-
-
-
-
-
-
 	printf("S u n   M o n   T u e   W e d   T h u   F r i   S a t\n");
 	//打印二维数组内容
 	for (row = 0;row <11;row++)
@@ -128,3 +244,6 @@ illegal:
 	}
 	return 0;
 }
+
+
+//今天先写到这
