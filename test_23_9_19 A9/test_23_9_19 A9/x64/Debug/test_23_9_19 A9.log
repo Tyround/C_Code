@@ -1,0 +1,4 @@
+﻿  test.c
+D:\code_c\code_test\test_23_9_19 A9\test_23_9_19 A9\test.c(16,12): warning C4013: “test_prime”未定义；假设外部返回 int
+D:\code_c\code_test\test_23_9_19 A9\test_23_9_19 A9\test.c(23,1): warning C4142: "test_prime": 类型的良性重定义
+  test_23_9_19 A9.vcxproj -> D:\code_c\code_test\test_23_9_19 A9\x64\Debug\test_23_9_19 A9.exe
