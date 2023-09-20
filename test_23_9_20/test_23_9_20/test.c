@@ -1,0 +1,84 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+
+//A10 100元 50元 20元 10元 5元 1元 纸币，各abcdef张，购买x元商品。使找零钱张数最少，支付张数尽可能少。
+
+
+//这个函数进行一次完整支付，并返回0表示完整支付
+int full_pay(int cash[6], int value[6], int mount[6], int x, int left);
+
+int main()
+{
+	int cash[6], x = 0;
+	int value[6] = { 100, 50, 20, 10, 5, 1 };
+	re:
+	scanf("%d %d %d %d %d %d", &cash[0], &cash[1], &cash[2], & cash[3], &cash[4], &cash[5]);
+	scanf("%d", &x);
+	if (100 * cash[0] + 50 * cash[1] + 20 *cash[2] + 10 *cash[3] + 5 * cash[4] + cash[5] < x)
+	{
+		printf("买不起，滚\n");
+		goto re;
+	}
+
+	else if (cash[0] < 0 || cash[1] < 0 || cash[2] < 0 || cash[3] < 0 || cash[4] < 0 || cash[5] < 0 || x < 0)
+	{
+		printf("数值不合法，请重新输入：");
+		goto re;
+	}
+
+	int mount[6] = { 0 };//这是纸币所需张数
+	int left = x;//待付款数
+
+	
+	//这里考虑不需找零情况
+	int i = 0;
+	int fp = full_pay(cash, value, mount, x, left);
+	if(fp != 0)
+	{
+		for (i = 0; i < 6; i++)
+		{
+			printf("%d ", mount[i]);
+		}
+		printf("\n%d", fp);
+	}
+
+	//left!=0, 意味着无法不找零完成任务，现在情况复杂了起来 :(
+	//现在考虑到，不会有任何情况，有人找给你100元
+	// 类似地，50元最多找1张，20元最多找4张，10元最多找1张，5元最多一张，1元最多4张。
+	//我们先考虑找零为1张的
+	int return_num[6] = {0,0,0,0,0,0};
+	
+
+
+
+
+
+	return 0;
+}
+
+
+int full_pay(int cash[6], int value[6], int mount[6], int x, int left) 
+{
+	int i = 0;
+	int count = 0;
+	for (i = 0; i < 6; i++)
+	{
+		if (cash[i] >= left / value[i])
+		{
+			mount[i] = left / value[i];
+			count += left / value[i];
+			left -= value[i] * mount[i];
+		}
+		else
+		{
+			mount[i] = cash[i];
+			left -= value[i] * mount[i];
+		}
+	}
+	if (left == 0)
+	{
+		return count;
+	}
+	else
+		return 0;
+}
