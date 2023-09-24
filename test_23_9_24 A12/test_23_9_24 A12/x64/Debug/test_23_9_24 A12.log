@@ -1,0 +1,4 @@
+﻿  test.c
+D:\code_c\code_test\test_23_9_24 A12\test_23_9_24 A12\test.c(53,11): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\code_c\code_test\test_23_9_24 A12\test_23_9_24 A12\test.c(53,30): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  test_23_9_24 A12.vcxproj -> D:\code_c\code_test\test_23_9_24 A12\x64\Debug\test_23_9_24 A12.exe
