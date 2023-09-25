@@ -1,0 +1,4 @@
+﻿  test.c
+D:\code_c\code_test\test_23_9_25\test_23_9_25\test.c(11,15): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\code_c\code_test\test_23_9_25\test_23_9_25\test.c(11,49): warning C4101: “defint”: 未引用的局部变量
+  test_23_9_25.vcxproj -> D:\code_c\code_test\test_23_9_25\x64\Debug\test_23_9_25.exe
