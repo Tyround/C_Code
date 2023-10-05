@@ -1,73 +1,89 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 
-void judgeTri(long long int a, long long int b, long long int c)
+
+
+char judgeTri(long long int a, long long int b, long long int c)
 {
-	int count = 0;
-	
 	if (a <= 0 || b <= 0 || c <= 0)
 	{
-		printf("error\n");
-		return;
+		return 'e';
 	}
 
 
-	if (a + b > c && b + c > a && c + a > b)
+	if ( b - a < c && c - a < b && a - c < b)
+	{
 
-		;
+	}
+
 	else
 	{
-		printf("error\n");
-		return;
+		return 'e';
 	}
 
 	if (a == b && b == c)
 	{
-		printf("dengbian");
-		count++;
+		return 'b';
 	}
 
 	else if (a == b || b == c || c == a)
 	{
-		printf("dengyao");
-		count++;
+		return 'y';
 	}
 	else
-		;
-
-
-	if (a * a + b * b == c * c || a * a == b * b + c * c || a * a + c * c == b * b)
 	{
-		printf("zhijiao");
-		count++;
+
 	}
 
-	if (count == 0)
-		printf("putong");
 
-	printf("\n");
 
-	return ;
+	if (a * a == c * c - b * b || a * a - b * b == c * c || a * a == b * b - c * c)
+	{
+		return 'z';
+
+	}
+
+	
+
+	return 'p';
 }
 
 
 int main()
 {
-	long long int a[512] = { 0 }, b[512] = { 0 }, c[512] = { 0 };
-	int count = 0;
+	long long int a = 0, b = 0, c = 0;
 	int n = 0;
+	char printChar[2048] = { '\0' };
 	scanf("%d", &n);
 	int i = 0;
 	for (; i < n; i++)
 	{
-		scanf("%lld %lld %lld", &a[i], &b[i], &c[i]);
+		scanf("%lld %lld %lld", &a, &b, &c);
+		printChar[i] = judgeTri(a, b, c);
 	}
+	printChar[i] = '\0';
 
-
-	for (i = 0; i < n; i ++)
+	for (i = 0; i < n; i++)
 	{
-		
-		judgeTri(a[i], b[i], c[i]);
+		if (printChar[i] == 'e')
+			printf("error\n");
+		else if (printChar[i] == 'b')
+			printf("dengbian\n");
+		else if (printChar[i] == 'y')
+			printf("dengyao\n");
+		else if (printChar[i] == 'z')
+			printf("zhijao\n");
+		else if (printChar[i] == 'p')
+			printf("putong\n");
+		else
+		{
+
+		}
+
+
 	}
 
 	return 0;
