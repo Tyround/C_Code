@@ -30,57 +30,49 @@ double part_gpa(int grade)
 
 double gpap(int a, int b, int c, int d, int e)
 {
-	return (part_gpa(a) + part_gpa(b) + part_gpa(c) + part_gpa(d) + part_gpa(e)) / 5.0;
+	return (part_gpa(a) + part_gpa(b) + part_gpa(c) + part_gpa(d) + part_gpa(e));
 }
 
-double gpabase[500] = { -1 };
-
-int gpacomp(double gpap, int num)
-{
-	int i = 0;
-	for (i = 0; i <= num; i++)
-	{
-		if (gpabase[i] == gpap)
-			return 0;
-	}
-	return 1;
-}
-
-//看不懂题目呢
 int main()
 {
-	int i = 0;
-	for (i = 0; i < 500; i++)
-	{
-		gpabase[i] = -1;
-	}
+	
 	int a = 0, b = 0, c = 0, d =  0, e = 0;
 	double gpa = 0;
-	int num = 0;
+	double num = 0;
 	double gradep = 0;
 	scanf("%lf", &gpa);
+	if (gpa == 0)
+		printf("%d ", 0);
 	for (a = 0; a <= 100; a++)
 	{
+		if (a + 400 <= num * 5 + 0.9 || (5 * a > num * 5 + 1.1&& num!=0))
+			continue;
 		for (b = a; b <= 100; b++)
 		{
+			if (a + b + 300 <= num * 5 + 0.9 || (a + 4*b > num * 5 + 1.1&& num!=0))
+				continue;
 			for (c = b; c <= 100; c++)
 			{
+				if (a + b + c + 200 <= num * 5 + 0.9 || (a + b + 3*c> num * 5 + 1.1&& num!=0))
+					continue;
 				for (d = c; d <= 100; d++)
 				{
+					if (a + b + c + d + 100 <= num * 5 + 0.9 || (a + b + c + 2*d > num * 5 + 1.1&& num!=0))
+						continue;
 					for (e = d; e <= 100; e++)
 					{
-						if (gpap(a, b, c, d, e) == gpa)
+						if (num != 0 &&(a + b + c + d + e <= num * 5 + 0.9 || a + b + c + d + e >= num * 5 + 1.1))
+							continue;
+						if (gpap(a, b, c, d, e) == gpa * 5)
 						{
-							gradep = (a + b + c + d + e) / 5.0;
-							if (gpacomp(gradep, num) == 1)
+							gradep = (a + b + c + d + e) / 5.0;							
+							if (gradep > num)
 							{								
-								printf("%d %d %d %d %d ", a, b, c, d, e);
-								printf("%lf\n", gradep);
-								gpabase[num] = gradep;
-								num++;
+								printf("%.1lf ", gradep);
+								num = gradep;
 							}							
 						}
-					}
+					}				
 				}
 			}
 		}
