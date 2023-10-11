@@ -7,7 +7,7 @@ int imax(int a, int b)
 {
 	return a > b ? a : b;
 }
-int scanf_num(int iNum[])//½«Êı¾İ´æÈëint,²¢·µ»Ø³¤¶È
+void scanf_num(int iNum[], int* pl)//½«Êı¾İ´æÈëint
 {
 	int i = 0;
 	char num[DIGITS] = { 0 };
@@ -17,7 +17,8 @@ int scanf_num(int iNum[])//½«Êı¾İ´æÈëint,²¢·µ»Ø³¤¶È
 	{
 		iNum[i] = num[length - 1 - i] - '0';
 	}
-	return length;
+	*pl = length;
+	return;
 }
 void numInf(int num[], int* pLength)
 {
@@ -29,17 +30,18 @@ void numInf(int num[], int* pLength)
 	*pLength = 1;
 	return;
 }
-int numTnum(const int numG[], int numR[], int lengthG, int lengthR)//½«Ç°Ò»¸ö¸ß¾«¶Èint¸³ÖµºóÒ»¸ö¸ß¾«¶Èint£¬²¢·µ»ØintÎ»Êı
+void numTnum(const int numG[], int numR[], int lengthG, int* pLengthR)//½«Ç°Ò»¸ö¸ß¾«¶Èint¸³ÖµºóÒ»¸ö¸ß¾«¶Èint£¬²¢·µ»ØintÎ»Êı
 {
 	int i = 0;
-	int length = imax(lengthG, lengthR);
+	int length = imax(lengthG, *pLengthR);
 	for (; i < length; i++)
 	{
 		numR[i] = numG[i];
 	}
-	return lengthG;
+	*pLengthR = lengthG;
+	return;
 }
-void print_preNum(int iNum[], int length)//´òÓ¡int¸ß¾«¶È
+void print_num(int iNum[], int length)//´òÓ¡int¸ß¾«¶È
 {
 	int i = 0;
 	for (i = length - 1; i >=0; i--)
@@ -49,21 +51,22 @@ void print_preNum(int iNum[], int length)//´òÓ¡int¸ß¾«¶È
 	printf("\n");
 	return;
 }
-int Plus(int num1[], int num2[], int l1, int l2, int numR[])//ÊµÏÖ¸ß¾«¶È¼Ó¸ß¾«¶È£¬´æÈëµÚÈı¸öÊı£¨¿ÉÒÔÊÇÖ®Ç°³öÏÖµÄ£©£¬·µ»Ø³¤¶È
+int Plus(int num1[], int num2[], int l1, int l2, int numR[], int* pL)//ÊµÏÖ¸ß¾«¶È¼Ó¸ß¾«¶È£¬´æÈëµÚÈı¸öÊı£¨¿ÉÒÔÊÇÖ®Ç°³öÏÖµÄ£©£¬·µ»Ø³¤¶È
 {
 	int max = imax(l1, l2);
-	int this = 0, next = 0, sum = 0;
+	int this = 0, next = 0, sum = 0, numDef[DIGITS] = { 0 };
 	int i = 0;
 	for (i = 0; (i < max || next != 0); i++)
 	{
 		sum = num1[i] + num2[i] + next;
 		this = sum % 10;
 		next = sum / 10;
-		numR[i] = this;		
+		numDef[i] = this;		
 	}
-	return i;
+	numTnum(numDef, numR, i, pL);
+	return 0;
 }
-int Times(int num1[], int num2[], int l1, int l2, int numR[], int lR)//ÊµÏÖ¸ß¾«¶È³ËÒÔ¸ß¾«¶È£¬´æÈëµÚÈı¸öÊı£¨¿ÉÒÔÊÇÖ®Ç°³öÏÖµÄ£©£¬·µ»Ø³¤¶È
+void Times(int num1[], int num2[], int l1, int l2, int numR[], int* pL)//ÊµÏÖ¸ß¾«¶È³ËÒÔ¸ß¾«¶È£¬´æÈëµÚÈı¸öÊı£¨¿ÉÒÔÊÇÖ®Ç°³öÏÖµÄ£©£¬·µ»Ø³¤¶È
 {
 	int numDef1[DIGITS] = { 0 }, numDef2[DIGITS] = { 0 }, dl1 = 0, dl2 = 0;
 	int this = 0, next = 0, sum = 0;
@@ -78,28 +81,96 @@ int Times(int num1[], int num2[], int l1, int l2, int numR[], int lR)//ÊµÏÖ¸ß¾«¶
 			numDef2[i + j] = this;			
 		}
 		dl2 = i + j;
-		dl1 = Plus(numDef2, numDef1, dl2, dl1, numDef1);
+		Plus(numDef2, numDef1, dl2, dl1, numDef1, &dl1);
 		numInf(numDef2, &dl2);
 	}
-	return numTnum(numDef1, numR, dl1, lR);
+	numTnum(numDef1, numR, dl1, pL);
+	return;
 }
-int Subtraction(int num1[], int num2[], int l1, int l2, int numR[], int lR)
+int Compare(const int num1[], const int num2[], const int l1, const int l2)
 {
-
+	if (l1 > l2)
+		return 1;
+	else if (l1 < l2)
+		return -1;
+	else
+	{
+		int i = l1 - 1;
+		for (; i >= 0; i--)
+		{
+			if (num1[i] > num2[i])
+				return 1;
+			else if (num1[i] < num2[i])
+				return -1;
+		}
+		return 0;
+	}
 }
+void Subtraction(int num1[], int num2[], int l1, int l2, int numR[], int* pL)//Ö»¿¼ÂÇÓÃ´óÊı¼õĞ¡Êı£¨doge
+{
+	int com = Compare(num1, num2, l1, l2);
+	if (com == -1)
+	{
+		printf("²»ÏëĞ´¸ºÊı\n");
+		return 0;
+	}
+	int i = 0, def = 0, this = 0, next = 0, numDef[DIGITS] = { 0 }, ret = 0;
+	for (; i < l2 || next != 0; i++)
+	{
+		def = num1[i] - num2[i] + next;
+		if (def >= 0)
+		{
+			this = def;
+			next = 0;
+		}
+		else
+		{
+			this = 10 + def;
+			next = -1;
+		}
+		numDef[i] = this;
+	}
+	for (i = l1 - 1; i > 0; i--)
+	{
 
+		if (numDef[i] != 0)
+			break;
+		ret++;
+	}
+	numTnum(numDef, numR, l1 - ret, pL);
+	return;
+}
+//int LowQuotient(int num[], int l, int x, int numR[], int lR, int* pLeft)//¸ß¾«¶È³ıÒÔµÍ¾«¶È
+//{
+//	int i = l - 1, this = 0, next = 0, def = 0, numDef[DIGITS] = { 0 }, ret = 0;
+//	for (; i >= 0; i--)
+//	{
+//		def = num[i] + 10 * next;
+//		this = def / x;
+//		next = def % x;	
+//		numDef[i] = this;
+//	}
+//	for (i = l - 1; i > 0; i--)
+//	{
+//		if (numDef[i] != 0)
+//			break;
+//		ret++;
+//	}
+//	*pLeft = next;
+//	return numTnum(numDef, numR, l - ret, lR);
+//}
 
 
 
 int main()
 {
-	int iNum1[DIGITS] = { 0 }, iNum2[DIGITS] = {0};
-	int length1 = scanf_num(iNum1), length2 = scanf_num(iNum2);
+	int num1[DIGITS] = { 0 }, num2[DIGITS] = { 0 }, length1 = 0, length2 = 0;
+	scanf_num(num1, &length1);
+	scanf_num(num2, &length2);
+	Subtraction(num1, num2, length1, length2, num1, &length1);
 
-	//length1 = numTnum(iNum2, iNum1, length2, length1);
-	length1 = Times(iNum2, iNum1, length2, length1, iNum1, length1);
 
-	print_preNum(iNum1, length1);
 
-	return 0;
+	print_num(num1, length1);
 }
+//11 - 1²»¶Ô£¬Ã÷Ìì¸Ä
