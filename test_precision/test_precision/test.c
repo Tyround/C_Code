@@ -284,7 +284,25 @@ void GPmodP(int base[], int lBase, int index[], int lIndex, int numP[], int lP, 
 	numTnum(baseC, numR, lBC, pL);
 	return;
 }
-
+int MRtest(int num[], int l, int base[], int lB)//输入p，及检验用的底数
+{
+	int numDef[DIGITS] = { 0 }, lDef = 1, mod[DIGITS] = { 0 }, lMod = 1;
+	int pS[DIGITS] = { 0 }, lPS = 1, num1[10] = { 1, 0 }, l1 = 1, num2[10] = { 2, 0 }, l2 = 1;
+	Subtraction(num, num1, l, l1, pS, &lPS);
+	int k = Devisor2Extract(pS, lPS, numDef, &lDef);
+	//可知k >=1
+	int i = 1;
+	for (; i <= k - 1 || i == 1; i++)
+	{
+		GPmodP(base, lB, numDef, lDef, num, l, mod, &lMod);
+		if (Compare(mod, pS, lMod, lPS) == 0 || Compare(mod, num1, lMod, l1) == 0)
+		{
+			return 1;
+		}
+		Times(numDef, num2, lDef, l2, numDef, &lDef);
+	}
+	return 0;
+}
 
 
 int main()
@@ -293,13 +311,13 @@ int main()
 	scanf_num(num1, &length1);
 	scanf_num(num2, &length2);
 
-	int numQ[DIGITS] = { 1,2 }, lQ = 2, numR[DIGITS] = { 0 }, lR = 1;
-	scanf_num(numQ, &lQ);
+	/*int numQ[DIGITS] = { 1,2 }, lQ = 2, numR[DIGITS] = { 0 }, lR = 1;
+	scanf_num(numQ, &lQ);*/
 
-	//GPmodP(num1, length1, num2, length2, numP, lP, numR, &lR);
-	//Subtraction(num1, num2, length1, length2, numQ, &lQ);
-	//HighQuotient(num1, length1, num2, length2, numQ, &lQ, numR, &lR);
-	GPmodP(num1, length1, num2, length2, numQ, lQ, numR, &lR);
-	//print_num(numQ, lQ);
-	print_num(numR, lR);
+
+
+
+	int ret = MRtest(num1, length1, num2, length2);
+	printf("%d\n", ret);
+	//print_num(num1, length1);
 }
