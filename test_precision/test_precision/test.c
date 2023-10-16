@@ -1,13 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS 1
-#define DIGITS 512
+#define DIGITS 666
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 
 int imax(int a, int b)
 {
 	return a > b ? a : b;
 }
-void scanf_num(int iNum[], int* pl)//将数据存入int
+void scanf_num(int iNum[], int* pl)//输入一串数字，存入int型高精度
 {
 	int i = 0;
 	char num[DIGITS] = { 0 };
@@ -29,6 +31,7 @@ void scanf_num(int iNum[], int* pl)//将数据存入int
 	*pl = def;
 	return;
 }
+
 void intTnum(int x, int num[], int* pL)//将int存入高精度中
 {
 	int i = 0;
@@ -56,6 +59,7 @@ void numInf(int num[], int* pLength)
 	*pLength = 1;
 	return;
 }
+
 void numTnum(int numG[], int numR[], int lengthG, int* pLengthR)//将前一个高精度int赋值后一个高精度int
 {
 	int i = 0;
@@ -303,21 +307,111 @@ int MRtest(int num[], int l, int base[], int lB)//输入p，及检验用的底数
 	}
 	return 0;
 }
+int preTest(int num[], int l)//对高精度数进行预处理，可能是质数返回1， 合数返回0
+{
 
+	if (num[0] == 0 || num[0] == 2 || num[0] == 4 || num[0] == 6 || num[0] == 8 || num[0] == 5)//去除2和5的倍数
+		return 0;
+	int sumOdd = 0, sumEven = 0, i = 0;
+	for (; i < l; i++)//
+	{
+		if (i % 2 == 0)
+			sumOdd += num[i];
+		else
+			sumEven += num[i];
+	}
+	if ((sumOdd + sumEven) % 3 == 0)//去掉3倍数
+		return 0;
+	if (sumOdd == sumEven)//去掉11倍数
+		return 0;
+	//7的倍数略微复杂，加入她的提升也是微小的，不写啦
+	return 1;
+}
+int superMR(int num[], int l)//用多个底数进行MR检验，可能是质数则返回1，合数返回0
+{
+	if(preTest(num, l) == 0)
+		return 0;
+	
+	int aGroup[10][DIGITS] = { {2},{3,7} }, lA[10] = { 1 , 2};
+	int i = 0, ret = 0;
+	for (; i < 2; i++)
+	{
+		ret = MRtest(num, l, aGroup[i], lA[i]);
+		if (ret == 0)
+			return 0;
+	}
+	return 1;
+}
+void randBig(int num[], int* l)//生成不大于2^1024的大数（实际小一点doge
+{
+	int i = 0;
+	num[308] = rand() % 2;
+	num[307] = rand() % 8;
+	num[306] = rand() % 9;
+	for (i = 0; i < 306; i++)
+	{
+		num[i] = rand() % 10;
+	}
+	for (i = 308; i >= 0; i--)
+	{
+		if (num[i] != 0)
+			break;
+	}
+	*l = i + 1;
+	return;
+}
+void PrimeGenerate(void)//随机生成一个质数（2进制下1024位）
+{
+	char Cstandard[320] = "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216";
+	int stand[320] = { 0 }, lStand = 309, iStand = 0;
+	int num1[DIGITS] = {1}, l1 = 1;
+	for (iStand = 0; iStand < 309; iStand++)
+	{
+		stand[iStand] = Cstandard[308 - iStand] - '0';
+	}
+	int num[DIGITS] = { 0 }, l = 0;
+	int count = 1;
+	randBig(num, &l);
+	Plus(num, stand, l, lStand, num, &l);
+	for(;;count++)
+	{		
+		printf("%d ", count);
+		print_num(num, l);
+		
+		if (superMR(num, l) == 1)
+		{
+			
+			break;
+		}
+		Plus(num, num1, l, l1, num, &l);
+	}
+	
+	return;
+}
 
 int main()
 {
-	int num1[DIGITS] = { 0 }, num2[DIGITS] = { 0 }, length1 = 0, length2 = 0;
-	scanf_num(num1, &length1);
-	scanf_num(num2, &length2);
+	srand((unsigned int)time(NULL));
+	printf("1024bits big prime :\n");
+	PrimeGenerate();
 
-	/*int numQ[DIGITS] = { 1,2 }, lQ = 2, numR[DIGITS] = { 0 }, lR = 1;
-	scanf_num(numQ, &lQ);*/
+	/*printf("please input n:");
+	int num[DIGITS] = { 0 }, length = 0, n = 0, i = 0;
+	scanf("%d", &n);
+	for(; i < n; i++)
+	{
+		printf("please input big number:\n");
+		scanf_num(num, &length);
+		if (superMR(num, length) == 1)
+			printf("是质数");
+		else
+			printf("不是质数");
+	}
+	*/
 
-
-
-
-	int ret = MRtest(num1, length1, num2, length2);
-	printf("%d\n", ret);
-	//print_num(num1, length1);
+	/*int numR[DIGITS] = { 4,2,0,1 }, lR = 4, numK[DIGITS] = { 5,2,0,1 }, lK = 4;
+	GreatPower(2, numR, lR, numR, & lR);
+	GreatPower(2, numK, lK, numK, &lK);
+	print_num(numR, lR);
+	print_num(numK, lK);*/
 }
