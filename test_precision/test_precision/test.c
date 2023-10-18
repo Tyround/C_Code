@@ -1,14 +1,30 @@
 #define _CRT_SECURE_NO_WARNINGS 1
-#define DIGITS 2048
+#define DIGITS 1024
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 
-
-
-int imax(int a, int b)
+unsigned char digitSubtraction(unsigned char a, unsigned char b)
 {
-	return a > b ? a : b;
+	int ad = 0, bd = 0;
+	do
+	{
+		ad = a ^ b;
+		bd = ((~a) & b) << 1;
+		a = ad, b = bd;
+	} while (bd != 0);
+	return a;
+ }
+unsigned char digitPlus(unsigned char a, unsigned char b)
+{
+	int ad = 0, bd = 0;
+	do
+	{
+		ad = a ^ b;
+		bd = (a & b) << 1;
+		a = ad, b = bd;
+	} while (bd != 0);
+	return a;
 }
 void scanf_num(unsigned char iNum[], int* pl)//ÊäÈëÒ»´®Êı×Ö£¬´æÈëunsigned charĞÍ¸ß¾«¶È
 {
@@ -65,7 +81,7 @@ void numInf(unsigned char num[], int* pLength)
 void numTnum(unsigned char numG[], unsigned char numR[], int lengthG, int* pLengthR)//½«Ç°Ò»¸ö¸ß¾«¶Èunsigned char¸³ÖµºóÒ»¸ö¸ß¾«¶Èunsigned char
 {
 	int i = 0;
-	int length = imax(lengthG, *pLengthR);
+	int length = lengthG > *pLengthR ? lengthG : *pLengthR;
 	for (; i < length; i++)
 	{
 		numR[i] = numG[i];
@@ -83,19 +99,18 @@ void print_num(unsigned char iNum[], int length)//´òÓ¡unsigned char¸ß¾«¶È
 	printf("\n");
 	return;
 }
-void Plus(unsigned char num1[], unsigned char num2[], int l1, int l2, unsigned char numR[], int* pL)//ÊµÏÖ¸ß¾«¶È¼Ó¸ß¾«¶È£¬´æÈëµÚÈı¸öÊı£¨¿ÉÒÔÊÇÖ®Ç°³öÏÖµÄ£©
+void Plus(unsigned char num1[], unsigned char num2[], int *l1, int l2)//ÊµÏÖ¸ß¾«¶È¼Ó¸ß¾«¶È
 {
-	int max = imax(l1, l2);
-	unsigned char  numDef[DIGITS] = { 0 };
+	int max = *l1 > l2 ? *l1 : l2;
 	int i = 0,this = 0, next = 0, sum = 0;
 	for (i = 0; (i < max || next != 0); i++)
 	{
 		sum = num1[i] + num2[i] + next;
 		this = sum % 10;
 		next = sum / 10;
-		numDef[i] = this;		
+		num1[i] = this;		
 	}
-	numTnum(numDef, numR, i, pL);
+	*l1 = i;
 	return;
 }
 void Times(unsigned char num1[], unsigned char num2[], int l1, int l2, unsigned char numR[], int* pL)//ÊµÏÖ¸ß¾«¶È³ËÒÔ¸ß¾«¶È£¬´æÈëµÚÈı¸öÊı£¨¿ÉÒÔÊÇÖ®Ç°³öÏÖµÄ£©
@@ -114,7 +129,7 @@ void Times(unsigned char num1[], unsigned char num2[], int l1, int l2, unsigned 
 			numDef2[i + j] = this;			
 		}
 		dl2 = i + j;
-		Plus(numDef2, numDef1, dl2, dl1, numDef1, &dl1);
+		Plus( numDef1,numDef2,  &dl1,dl2);
 		numInf(numDef2, &dl2);
 	}
 	numTnum(numDef1, numR, dl1, pL);
@@ -139,22 +154,21 @@ int Compare(const unsigned char num1[], const unsigned char num2[], int l1, int 
 		return 0;
 	}
 }
-void Subtraction(unsigned char num1[], unsigned char num2[], int l1, int l2, unsigned char numR[], int* pL)//Ö»¿¼ÂÇÓÃ´óÊı¼õĞ¡Êı£¨doge
+void Subtraction(unsigned char num1[], unsigned char num2[], int *l1, int l2)//Ö»¿¼ÂÇÓÃ´óÊı¼õĞ¡Êı£¨doge
 {
-
-	int com = Compare(num1, num2, l1, l2);
+	/*int com = Compare(num1, num2, *l1, l2);
 	if (com == -1)
 	{
 		printf("²»ÏëĞ´¸ºÊı\n");
 		return;
-	}
+	}*/
 	int i = 0;
-	unsigned char numDef[DIGITS] = { 0 };
 	int def = 0, this = 0, next = 0,ret = 0;
-	for (i = 0; i < l1 || next != 0; i++)
+	for (i = 0; i < *l1 || next != 0; i++)
 	{
-
-		def = (int)num1[i] - (int)num2[i] + next;
+		
+		def = num1[i] - num2[i] + next;
+		//¿¼ÂÇÓÃ°´Î»²Ù×÷·û´úÌæ¼õ·¨
 		next = 0;
 		if (def >= 0)
 		{
@@ -166,67 +180,52 @@ void Subtraction(unsigned char num1[], unsigned char num2[], int l1, int l2, uns
 			this = 10 + def;
 			next = -1;
 		}
-		numDef[i] = this;
+		num1[i] = this;
 
 	}
-	for (i = l1 - 1; i > 0; i--)
+	for (i = *l1 - 1; i > 0; i--)
 	{
 
-		if (numDef[i] != 0)
+		if (num1[i] != 0)
 			break;
 		ret++;
 	}
-
-	numTnum(numDef, numR, l1 - ret, pL);
+	*l1 = *l1 - ret;
 	return;
 }
-int LowQuotient(unsigned char num[], int l, int x, unsigned char numR[], int* pL)//¸ß¾«¶È³ıÒÔµÍ¾«¶È,·µ»ØÓàÊı
+int LowQuotient(unsigned char num[], int* l, int x)//¸ß¾«¶È³ıÒÔµÍ¾«¶È,·µ»ØÓàÊı
 {
-	int i = l - 1;
-	unsigned char numDef[DIGITS] = { 0 };
+	int i = *l - 1;
 	int this = 0, next = 0, def = 0,ret = 0;
 	for (; i >= 0; i--)
 	{
 		def = num[i] + 10 * next;
 		this = def / x;
 		next = def % x;	
-		numDef[i] = this;
+		num[i] = this;
 	}
-	for (i = l - 1; i > 0; i--)
+	for (i = *l - 1; i > 0; i--)
 	{
-		if (numDef[i] != 0)
+		if (num[i] != 0)
 			break;
 		ret++;
 	}
-	numTnum(numDef, numR, l - ret, pL);
+	*l = *l - ret;
 	return next;
 }
-void HighQuotient(unsigned char num[], int l, unsigned char div[], int dl, unsigned char quo[], int* lQ, unsigned char remainder[], int* lR)//¸ß¾«¶È³ıÒÔ¸ß¾«¶È
+void HighQuotient(unsigned char num[], int* l, unsigned char div[], int dl)//¸ß¾«¶È³ıÒÔ¸ß¾«¶È
 {
-	unsigned char numDef[DIGITS] = { 0 }, quoDef[DIGITS] = { 0 };
-	int lDef = 0, lQD = 0;
-	int i = l - dl;
-	numTnum(num, numDef, l, &lDef);
+	int i = *l - dl;
 	int lDefDef = 0;
 	for (;i >= 0; i--)
 	{
-		while (-1 != Compare(numDef + i, div, lDef - i, dl))
+		while (-1 != Compare(num + i, div, *l - i, dl))
 		{
-			lDefDef = lDef - i;
-			Subtraction(numDef + i, div, lDefDef, dl, numDef + i, &lDefDef);
-			lDef = lDefDef + i;
-
-			quoDef[i]++;
-			if (lQD == 0)
-			{
-				lQD = i + 1;
-			}
+			lDefDef = *l - i;
+			Subtraction(num + i, div, &lDefDef, dl);
+			*l = lDefDef + i;		
 		}
 	}
-	if (lQD == 0)
-		lQD++;
-	numTnum(numDef, remainder, lDef, lR);
-	numTnum(quoDef, quo, lQD, lQ);
 	return;
 }
 //void GreatPower(int a, unsigned char num[], int length, unsigned char numR[], int* pL)//ÇóµÍ¾«¶ÈµÄ¸ß¾«¶È´ÎÃİ
@@ -243,7 +242,7 @@ void HighQuotient(unsigned char num[], int l, unsigned char div[], int dl, unsig
 //
 //	for (; !(lCopy == 1 && numCopy[0] == 1);)
 //	{
-//		left = LowQuotient(numCopy, lCopy, 2, numCopy, &lCopy);
+//		left = LowQuotient(numCopy, &lCopy, 2);
 //		if(left == 1)
 //			Times(numDef, numA, lDef, lA, numDef, &lDef);
 //		
@@ -263,64 +262,136 @@ int Devisor2Extract(unsigned char num[], int length, unsigned char numR[], int* 
 	int ass = 0;
 	for(; numDef[0] % 2 != 1; count++)
 	{
-		LowQuotient(numDef, lDef, 2, numDef, &lDef);
+		LowQuotient(numDef, &lDef, 2);
 	}
 	numTnum(numDef, numR, lDef, pL);
 	return count;
 }
 void GPmodP(unsigned char base[], int lBase, unsigned char index[], int lIndex, unsigned char numP[], int lP, unsigned char numR[], int* pL)//²»ÄÑ·¢ÏÖÒ»¸öÊıµÄ¸ß¾«¶È´Î·½´óµÃ¿ÉÅ¾£¬ĞèÒªÔÚÃİ·½¹ı³ÌÖĞÊ±Ê±¼õÈ¥p
 {
+	time_t a, b;
+	a = clock();
+
 	unsigned char baseC[DIGITS] = { 0 }, indexC[DIGITS] = { 0 }; 
 	int lIC = 1, lBC = 1;
-	unsigned char rabbish[DIGITS] = { 0 };
-	int lRabbish = 1;
 	numTnum(base, baseC, lBase, &lBC);
 	numTnum(index, indexC, lIndex, &lIC);
 	unsigned char numDef[DIGITS] = { 1,0 };
 	int left = 0;
 	int lDef = 1;
+	
+	
 	if (-1 != Compare(baseC, numP, lBC, lP))
 	{
-		//Subtraction(baseC, numP, lBC, lP, baseC, &lBC);
-		HighQuotient(baseC, lBC, numP, lP, rabbish, &lRabbish, baseC, &lBC);
-	}
-	for (; !(lIC == 1 && indexC[0] == 1);)
-	{
 		
-		left = LowQuotient(indexC, lIC, 2, indexC, &lIC);
+		//HighQuotient(baseC, &lBC, numP, lP);
+
+
+		int i = lBC - lP;
+		int lDefDef = 0;
+		for (; i >= 0; i--)
+		{
+			while (-1 != Compare(baseC + i, numP, lBC - i, lP))
+			{
+				lDefDef = lBC - i;
+				Subtraction(baseC + i, numP, &lDefDef, lP);
+				lBC = lDefDef + i;
+			}
+		}
+		
+	}
+	
+	
+	
+	for (; !(lIC == 1 && indexC[0] == 1);)
+	{	
+		
+		
+		left = LowQuotient(indexC, &lIC, 2);
 		if (left == 1)
 		{
 			Times(numDef, baseC, lDef, lBC, numDef, &lDef);
 			if (-1 != Compare(numDef, numP, lDef, lP))
 			{
-				HighQuotient(numDef, lDef, numP, lP, rabbish, &lRabbish, numDef, &lDef);
+				int i = lDef - lP;
+				int lDefDef = 0;
+				for (; i >= 0; i--)
+				{
+					while (-1 != Compare(numDef + i, numP, lDef - i, lP))
+					{
+						lDefDef = lDef - i;
+						Subtraction(numDef + i, numP, &lDefDef, lP);
+						lDef = lDefDef + i;
+					}
+				}
 			}
 		}
+		
 		Times(baseC, baseC, lBC, lBC, baseC, &lBC);
+		
+		
 		if (-1 != Compare(baseC, numP, lBC, lP))
-		{
-			HighQuotient(baseC, lBC, numP, lP, rabbish, &lRabbish, baseC, &lBC);
+		{		
+			int i = lBC - lP;
+			int lDefDef = 0;
+			for (; i >= 0; i--)
+			{
+
+				while (-1 != Compare(baseC + i, numP, lBC - i, lP))
+				{
+					lDefDef = lBC - i;
+					Subtraction(baseC + i, numP, &lDefDef, lP);
+					lBC = lDefDef + i;
+				}
+				
+			}		
 		}
+		
 	}
+	
+	
 	Times(numDef, baseC, lDef, lBC, baseC, &lBC);
 	if (-1 != Compare(baseC, numP, lBC, lP))
 	{
-		HighQuotient(baseC, lBC, numP, lP, rabbish, &lRabbish, baseC, &lBC);
+		int i = lBC - lP;
+		int lDefDef = 0;
+		for (; i >= 0; i--)
+		{
+			while (-1 != Compare(baseC + i, numP, lBC - i, lP))
+			{
+				lDefDef = lBC - i;
+				Subtraction(baseC + i, numP, &lDefDef, lP);
+				lBC = lDefDef + i;
+			}
+		}
 	}
 	numTnum(baseC, numR, lBC, pL);
+	
+
+	b = clock();
+	printf("%lf\n", (double)(b - a) / CLOCKS_PER_SEC);
 	return;
 }
 int MRtest(unsigned char num[], int l, unsigned char base[], int lB)//ÊäÈëp£¬¼°¼ìÑéÓÃµÄµ×Êı
 {
+	
 	unsigned char numDef[DIGITS] = { 0 }, mod[DIGITS] = { 0 };
 	int lDef = 1, lMod = 1;
 	unsigned char pS[DIGITS] = { 0 }, num1[DIGITS] = { 1, 0 }, num2[DIGITS] = { 2, 0 };//pSÓÃÓÚ´æ´¢n - 1£¬ defÀï´æ·ÅÖ¸Êı,modÖĞ´æ·Åmod
 	int l1 = 1, lPS = 1, l2 = 1;
-	Subtraction(num, num1, l, l1, pS, &lPS);
+	numTnum(num, pS, l, &lPS);
+	Subtraction(pS, num1, &lPS, l1);
+	
 	int k = Devisor2Extract(pS, lPS, numDef, &lDef);
+	
 	//¿ÉÖªk >= 1
 	int i = 0, ret = 0;
-	GPmodP(base, lB, numDef, lDef, num, l, mod, &lMod);
+	
+
+	GPmodP(base, lB, numDef, lDef, num, l, mod, &lMod);//Ê±¼äÖ÷Òª»¨ÔÚÕâÒ»²½ÉÏ
+	
+	
+	
 	for (;; i++, GPmodP(mod, lMod, num2, l2, num, l, mod, &lMod))
 	{
 		if (Compare(mod, pS, lMod, lPS) == 0)
@@ -347,6 +418,7 @@ int MRtest(unsigned char num[], int l, unsigned char base[], int lB)//ÊäÈëp£¬¼°¼
 			break;
 		}
 	}
+	
 	return ret;
 }
 int preTest(unsigned char num[], int l)//¶Ô¸ß¾«¶ÈÊı½øĞĞÔ¤´¦Àí£¬¿ÉÄÜÊÇÖÊÊı·µ»Ø1£¬ ºÏÊı·µ»Ø0
@@ -379,17 +451,20 @@ int preLowTest(unsigned char num[], int l)//ÅĞ¶ÏºÜĞ¡µÄÖÊÊı
 }
 int superMR(unsigned char num[], int l)//ÓÃ¶à¸öµ×Êı½øĞĞMR¼ìÑé£¬¿ÉÄÜÊÇÖÊÊıÔò·µ»Ø1£¬ºÏÊı·µ»Ø0
 {
+	
 	if (preLowTest(num, l) == 1)
 		return 1;
 	if(preTest(num, l) == 0)
 		return 0;
 	
-	unsigned char aGroup[10][DIGITS] = { {2},{5,2,3} ,{5,7,3,9},{8,7,1,8,2}, {5,7,7,0,5,4}, {4,0,5,0,8,7,9},{2,2,0,5,6,2,5,9,7,1}};
+	unsigned char aGroup[10][DIGITS] = { {2},{5,2,3} ,{5,7,3,9},{8,7,1,8,2}, {5,7,7,0,5,4}, {4,0,5,0,8,7,9},{2,2,0,5,6,2,5,9,7,1} };//,{7,5,7,8,9,9,6,3,2,1,4,5,7,8,8,5,2,3,6,4,7,8,5,4,4,5,9,5,1,5,5,8,5,1,2,3,7,9,8,6,4,7,9,4,5,1,6,5,5,4,5,6,4,6,4,4,5,4,8,7,9,2,9} };
 	int lA[10] = { 1 , 3 ,4, 5, 6, 7, 10};
 	int i = 0, ret = 0;
-	for (; i < 7; i++)
+	for ( i = 6; i >= 0; i--)
 	{
+		
 		ret = MRtest(num, l, aGroup[i], lA[i]);
+		
 		if (ret == 0)
 			return 0;
 	}
@@ -414,7 +489,7 @@ void randBig(unsigned char num[], int* l)//Éú³É²»´óÓÚ2^1024µÄ´óÊı£¨Êµ¼ÊĞ¡Ò»µãdog
 	return;
 }
 void PrimeGenerate(void)//Ëæ»úÉú³ÉÒ»¸öÖÊÊı£¨2½øÖÆÏÂ1024Î»£©
-{
+{	
 	char Cstandard[320] = "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216";
 	unsigned char stand[320] = { 0 };
 	int lStand = 309, iStand = 0;
@@ -427,19 +502,18 @@ void PrimeGenerate(void)//Ëæ»úÉú³ÉÒ»¸öÖÊÊı£¨2½øÖÆÏÂ1024Î»£©
 	unsigned char num[DIGITS] = { 0 };
 	int l = 0;
 	int count = 1;
-	randBig(num, &l);
-	Plus(num, stand, l, lStand, num, &l);
+	randBig(num, &l);	
+	Plus(num, stand, &l, lStand);	
 	for(;;count++)
-	{		
+	{			
 		printf("%d ", count);
-		print_num(num, l);
-		
+		print_num(num, l);	
 		if (superMR(num, l) == 1)
 		{
 			printf("great!!!");
 			break;
-		}
-		Plus(num, num1, l, l1, num, &l);
+		}	
+		Plus(num, num1, &l, l1);
 	}
 	return;
 }
@@ -449,7 +523,6 @@ int main()
 	srand((unsigned int)time(NULL));
 	printf("1024bits big prime :\n");
 	PrimeGenerate();
-
 
 	//printf("please input n:");
 	//unsigned char num[DIGITS] = { 0 };
@@ -486,3 +559,6 @@ int main()
 	
 	//print_num(numK, lK);
 }
+
+//ÎŞ·¨Ê¶±ğµÄÖÊÊı
+//342306316014587030881690081234553129223851888600997080320601449774651684245132200662810329136023462577807460819354035577666036210546350935482857425399429932276139355925853689237564882147452991125643579312194921647070628767792479433829627837566731708691455608688656254318260177948189823333068428160695388768349
