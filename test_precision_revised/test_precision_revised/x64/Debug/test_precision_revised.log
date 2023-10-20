@@ -1,0 +1,6 @@
+﻿  test.c
+D:\code_c\code_test\test_precision_revised\test_precision_revised\test.c(144,2): warning C4013: “Times”未定义；假设外部返回 int
+D:\code_c\code_test\test_precision_revised\test_precision_revised\test.c(147,6): error C2371: “Times”: 重定义；不同的基类型
+D:\code_c\code_test\test_precision_revised\test_precision_revised\test.c(174,16): warning C4013: “Compare”未定义；假设外部返回 int
+D:\code_c\code_test\test_precision_revised\test_precision_revised\test.c(176,4): warning C4013: “Subtraction”未定义；假设外部返回 int
+D:\code_c\code_test\test_precision_revised\test_precision_revised\test.c(225,6): error C2371: “Subtraction”: 重定义；不同的基类型
