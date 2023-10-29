@@ -1,7 +1,9 @@
 ﻿  test.c
+D:\code_c\code_test\test_precision\test_precision\test.c(722,23): warning C4133: “函数”: 从“unsigned char [626]”到“unsigned int *”的类型不兼容
+D:\code_c\code_test\test_precision\test_precision\test.c(718,44): warning C4305: “初始化”: 从“int”到“unsigned char”截断
   正在生成代码
-  1 of 8 functions (12.5%) were compiled, the rest were copied from previous compilation.
+  3 of 35 functions ( 8.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   test_precision.vcxproj -> D:\code_c\code_test\test_precision\x64\Release\test_precision.exe
