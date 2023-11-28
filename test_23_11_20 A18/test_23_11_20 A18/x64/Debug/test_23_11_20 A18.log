@@ -1,4 +1,16 @@
 ﻿  test.c
-D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(50,2): warning C4013: “fprint”未定义；假设外部返回 int
-D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(77,19): error C2059: 语法错误:“)”
-D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(84,10): warning C4098: “uncompress”:“void”函数返回值
+D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(17,15): warning C4242: “=”: 从“unsigned __int64”转换到“u8”，可能丢失数据
+D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(47,10): warning C4242: “=”: 从“int”转换到“u8”，可能丢失数据
+D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(167,15): warning C4242: “=”: 从“unsigned __int64”转换到“u8”，可能丢失数据
+D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(206,10): warning C4777: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 1 拥有了类型“long”
+  D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(206,10):
+  请考虑在格式字符串中使用“%ld”
+  
+D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(278,1): warning C4255: “main”: 未给出函数原型: 将“()”转换为“(void)”
+D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(135): warning C5045: 如果指定了 /Qspectre 开关，编译器会插入内存负载的 Spectre 缓解
+  D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(131) : 注意: 在此行上通过对比检查索引 "st" 范围
+  D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(135) : 注意: 此行上的源调用
+D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(118): warning C5045: 如果指定了 /Qspectre 开关，编译器会插入内存负载的 Spectre 缓解
+  D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(114) : 注意: 在此行上通过对比检查索引 "st" 范围
+  D:\code_c\code_test\test_23_11_20 A18\test_23_11_20 A18\test.c(118) : 注意: 此行上的源调用
+  test_23_11_20 A18.vcxproj -> D:\code_c\code_test\test_23_11_20 A18\x64\Debug\test_23_11_20 A18.exe
