@@ -4,73 +4,84 @@
 //A8 验证尼克切丝定理：任何整数的立方可以表示成一串连续奇数
 
 //这个函数判断如何处理一串和数
-int judge_sum(int sum, int n)
-{
-	if(sum > n)
-		return -1;
-	if (sum == n)
-		return 1;
-	else
-		return 0;
-}
 
 int main()
 {
-	int n;
-	int sign = 1;
-	scanf("%d", &n);
-	if (n < 0)
-	{
-		sign = -1;
-		n = -n;
-	}
-	int def = n * n * n;
+	long long int n;
+
+	scanf("%lld", &n);
+	
+	
+	long long int def = n * n * n;
+	printf("%lld^3=%lld=", n, def);
 	n = def;
-	int i, j;
-	int sum = 0;
-	int js = 0;
-	for (i = 1; i <= n ; i += 2)
+	long long int j = 1;
+	long long int sum = 0;
+	long long int js = 0;
+	long long int countL = 1, countR = 1;
+	//for (i = 1; i <= n ; i += 2)
 	{
-		sum = 0;
-		for (j = i; ; j += 2)
+	
+		for (j = 1; ; j += 2,countR++)
 		{
 			sum += j;
-			js = judge_sum(sum, n);
-			if (js == 1)
+			
+			if (sum == n)
 			{
-				if (sign == -1)
+				/*if (sign == -1)
 				{
 					for (; i <= j; j -= 2)
 					{
 						printf("-");
-						printf("%d ", j);
+						printf("%d", j);
 					}
 					return 0;
-				}
-				else
+				}*/
+				
 				{
-					for (; i <= j; i += 2)
+					for (long long int i = 1; i <= j; i += 2)
 					{
-
-						printf("%d ", i);
+						if(i!=j)
+							printf("%lld+", i);
+						else
+							printf("%lld", i);
 					}
 					return 0;
 				}
-				for (; i <= j; i += 2)
-				{
-					
-					printf("%d ", i);
-				}
-				return 0;
 			}
-			else if (js == -1)
+
+
+			else if (sum>n)
 			{
 				break;
 			}
-			else
-				;
 		}
 	}
-	printf("找不到哦");//输入0，不难发现上述定理是不严谨的，应该怪出题人
+	while(1)
+	{
+		if (sum > n)
+		{
+			sum -= (2 * countL - 1);
+			countL++;
+		}
+		else if (sum < n)
+		{
+			sum += (2 * countR + 1);
+			countR++;
+		}
+		else
+		{
+			for (long long int k = 2 * countL - 1; k <= 2 * countR - 1; k += 2)
+			{
+				if(k< 2 * countR - 1)
+					printf("%lld+", k);
+				else
+					printf("%lld", k);
+			}
+			return 0;
+		}
+	}
+
+	printf("找不到哦");
 	return 0;   
 }
